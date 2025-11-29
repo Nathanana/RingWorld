@@ -8,7 +8,6 @@ export const state = {
     stepSize: 0,
     maxSteps: 0,
     currentStep: 0,
-    // animation control (shared)
     isRunning: false,
     isAnimatingStep: false,
     animationDuration: 300,
@@ -34,13 +33,11 @@ export function validateAndGetParams() {
         state.n = modulusVal
     }
 
-    // clamp a to [0, n-1]
     const aClamped = Number.isInteger(aVal) ? Math.max(0, Math.min(aVal, state.n - 1)) : 0
     state.a = aClamped
 
     state.b = Number.isInteger(bVal) ? Math.max(0, bVal) : 0
     state.operation = opVal
-    // ensure UI sliders reflect any clamping done here (ui will call syncDisplays)
     return true
 }
 

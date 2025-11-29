@@ -199,7 +199,6 @@ function startNextStepAnimation() {
         pause()
         return
     }
-    // pause periodic playback while animating
     if (state.isRunning && state.intervalId) {
         clearInterval(state.intervalId)
         state.intervalId = null
@@ -223,10 +222,8 @@ function startNextStepAnimation() {
                 cancelAnimationFrame(state.animationFrameId)
                 state.animationFrameId = null
             }
-            // finalize step: advance currentStep
             setTimeout(() => {
                 state.currentStep++
-                // if still running, schedule the next step after a small delay
                 if (state.isRunning && state.currentStep < state.maxSteps) {
                     state.intervalId = setTimeout(() => startNextStepAnimation(), 50)
                 } else {
@@ -241,7 +238,6 @@ function startNextStepAnimation() {
 }
 
 function play() {
-    // validation
     validateAndGetParams()
     clampAfterParamChange()
     generateSequence()
@@ -263,7 +259,6 @@ function play() {
         return
     }
 
-    // start the first step immediately
     startNextStepAnimation()
 }
 
@@ -282,7 +277,6 @@ function pause() {
 }
 
 function clampAfterParamChange() {
-    // ensure a slider max updated and value clamped
     const aEl = document.getElementById("a-number-input")
     if (!aEl) return
     const newMax = state.n - 1

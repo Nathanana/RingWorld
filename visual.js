@@ -41,7 +41,6 @@ export function drawRing(currentProgress = 1) {
     ctx.lineWidth = 1
     ctx.stroke()
 
-    // draw arcs for completed steps and optionally animating step
     const stepsToConsider = Math.min(state.maxSteps, state.currentStep + (state.isAnimatingStep ? 1 : 0))
     for (let k = 1; k <= stepsToConsider; k++) {
         const startVal = (k === 1) ? state.startNum : state.sequence[k - 2].result
