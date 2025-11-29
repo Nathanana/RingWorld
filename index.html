@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Z/nZ Arithmetic Simulator</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"></script>
+</head>
+
+<body class="p-4 sm:p-8 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
+                ℤ/nℤ Arithmetic Simulator
+            </h1>
+            <p class="text-lg text-indigo-600 font-medium">Visualizing Modular Operations</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-custom border border-gray-100">
+                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Parameters</h2>
+
+                    <label class="block text-sm font-medium text-gray-700">
+                        Ring Size n
+                    </label>
+                    <input id="modulus-input" type="range" min="2" max="20" value="5" />
+                    <div class="text-indigo-600 font-mono" id="modulus-display">5</div>
+
+                    <label class="block text-sm font-medium text-gray-700 mt-4">Number a</label>
+                    <input id="a-number-input" type="range" min="0" max="19" value="0" />
+                    <div class="text-indigo-600 font-mono" id="a-number-display">0</div>
+
+                    <label class="block text-sm font-medium text-gray-700 mt-4">Number b</label>
+                    <input id="b-number-input" type="range" min="0" max="20" value="3" />
+                    <div class="text-indigo-600 font-mono" id="b-number-display">3</div>
+
+                    <label class="block text-sm font-medium text-gray-700 mt-4">Operation</label>
+                    <select id="operation-select" class="border rounded p-2 w-full">
+                        <option value="addition">Addition</option>
+                        <option value="multiplication">Multiplication</option>
+                    </select>
+                </div>
+
+                <button id="play-pause-btn" class="w-full p-3 rounded-lg bg-indigo-600 text-white">
+                    Play
+                </button>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6 flex flex-col items-center">
+                <canvas id="ringCanvas" width="400" height="400"></canvas>
+
+                <div class="bg-white p-6 rounded-xl shadow-custom border border-gray-100 w-full">
+                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Current Result</h2>
+                    <div id="equation-display" class="text-center text-xl"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

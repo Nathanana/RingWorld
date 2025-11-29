@@ -1,0 +1,20 @@
+body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+
+.shadow-custom {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+#ringCanvas {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#equation-display {
+    overflow-x: auto;
+    white-space: nowrap;
+}
