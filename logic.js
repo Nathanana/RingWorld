@@ -1,7 +1,7 @@
 export const state = {
-    n: 5,
-    a: 0,
-    b: 3,
+    n: 12,
+    a: 3,
+    b: 5,
     operation: "addition",
     sequence: [],
     startNum: 0,
@@ -10,7 +10,7 @@ export const state = {
     currentStep: 0,
     isRunning: false,
     isAnimatingStep: false,
-    animationDuration: 300,
+    animationDuration: 400,
     animationStartTime: 0,
     animationFrameId: null,
     intervalId: null
@@ -22,13 +22,13 @@ export function validateAndGetParams() {
     const bEl = document.getElementById("b-number-input")
     const opEl = document.getElementById("operation-select")
 
-    const modulusVal = parseInt(modEl?.value || "5", 10)
-    const aVal = parseInt(aEl?.value || "0", 10)
-    const bVal = parseInt(bEl?.value || "0", 10)
+    const modulusVal = parseInt(modEl?.value || "12", 10)
+    const aVal = parseInt(aEl?.value || "3", 10)
+    const bVal = parseInt(bEl?.value || "5", 10)
     const opVal = opEl?.value || "addition"
 
     if (!Number.isInteger(modulusVal) || modulusVal < 2) {
-        state.n = 5
+        state.n = 12
     } else {
         state.n = modulusVal
     }

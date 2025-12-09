@@ -3,6 +3,7 @@ import { drawRing } from "./visual.js"
 
 let playPauseBtn = null
 let speedSlider = null
+let speedDisplay = null
 let animateCheckbox = null
 let modulusInput = null
 let aInput = null
@@ -12,10 +13,14 @@ let equationDisplay = null
 let modulusDisplay = null
 let aDisplay = null
 let bDisplay = null
+let stepCounter = null
+let stepBackBtn = null
+let stepForwardBtn = null
 
 export function setupControls() {
     playPauseBtn = document.getElementById("play-pause-btn")
     speedSlider = document.getElementById("speed-slider")
+    speedDisplay = document.getElementById("speed-display")
     animateCheckbox = document.getElementById("animate-checkbox")
     modulusInput = document.getElementById("modulus-input")
     aInput = document.getElementById("a-number-input")
@@ -25,6 +30,9 @@ export function setupControls() {
     modulusDisplay = document.getElementById("modulus-display")
     aDisplay = document.getElementById("a-number-display")
     bDisplay = document.getElementById("b-number-display")
+    stepCounter = document.getElementById("step-counter")
+    stepBackBtn = document.getElementById("step-back-btn")
+    stepForwardBtn = document.getElementById("step-forward-btn")
 
     if (modulusInput) {
         modulusInput.addEventListener("input", (e) => {
@@ -66,6 +74,7 @@ export function setupControls() {
     if (speedSlider) {
         speedSlider.addEventListener("input", () => {
             state.animationDuration = parseInt(speedSlider.value, 10)
+            updateSpeedDisplay()
             pause()
         })
     }
@@ -80,6 +89,26 @@ export function setupControls() {
         })
     }
 
+    if (stepBackBtn) {
+        stepBackBtn.addEventListener("click", () => stepBack())
+    }
+
+    if (stepForwardBtn) {
+        stepForwardBtn.addEventListener("click", () => stepForward())
+    }
+
+    const exampleBtns = document.querySelectorAll(".example-btn")
+    exampleBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const n = parseInt(btn.dataset.n, 10)
+            const a = parseInt(btn.dataset.a, 10)
+            const b = parseInt(btn.dataset.b, 10)
+            const op = btn.dataset.op
+            
+            loadExample(n, a, b, op)
+        })
+    })
+
     document.addEventListener("keydown", (e) => {
         if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return
         if (e.code === "Space") {
@@ -93,6 +122,39 @@ export function setupControls() {
             stepBack()
         }
     })
+
+    updateSpeedDisplay()
+}
+
+function loadExample(n, a, b, op) {
+    pause()
+    
+    state.n = n
+    state.a = a
+    state.b = b
+    state.operation = op
+    
+    modulusInput.value = n
+    aInput.value = a
+    bInput.value = b
+    operationSelect.value = op
+    
+    syncDisplays()
+    clampInputs()
+    validateAndGetParams()
+    generateSequence()
+    state.currentStep = 0
+    drawRing(1)
+    renderEquation()
+    updateStepCounter()
+}
+
+function updateSpeedDisplay() {
+    if (!speedDisplay || !speedSlider) return
+    const speed = parseInt(speedSlider.value, 10)
+    if (speed <= 200) speedDisplay.textContent = "Fast"
+    else if (speed <= 500) speedDisplay.textContent = "Medium"
+    else speedDisplay.textContent = "Slow"
 }
 
 function handleParamChange() {
@@ -102,6 +164,7 @@ function handleParamChange() {
     generateSequence()
     drawRing(1)
     renderEquation()
+    updateStepCounter()
 }
 
 function clampInputs() {
@@ -134,7 +197,7 @@ function renderEquation() {
         equationDisplay.innerHTML = `$$\\text{Result: } ${finalOp} \\equiv ${finalResult} \\pmod{${state.n}}$$`
     } else if (state.currentStep === 0) {
         const totalOp = state.operation === "addition" ? `${state.a} + ${state.b}` : `${state.a} \\cdot ${state.b}`
-        equationDisplay.innerHTML = `$$\\text{Operation: } ${totalOp} \\pmod{${state.n}}$$`
+        equationDisplay.innerHTML = `$$\\text{Computing: } ${totalOp} \\pmod{${state.n}}$$`
     } else if (state.currentStep > 0 && state.sequence[state.currentStep - 1]) {
         const stepData = state.sequence[state.currentStep - 1]
         if (state.operation === "addition") {
@@ -146,7 +209,7 @@ function renderEquation() {
         const final = state.sequence[state.maxSteps - 1]?.result ?? 0
         const totalOp = state.operation === "addition" ? `${state.a} + ${state.b}` : `${state.a} \\cdot ${state.b}`
         const sum = state.sequence[state.maxSteps - 1]?.sum ?? 0
-        equationDisplay.innerHTML = `$$\\text{Final Result: } ${totalOp} = ${sum} \\equiv ${final} \\pmod{${state.n}}$$`
+        equationDisplay.innerHTML = `$$\\text{Final: } ${totalOp} = ${sum} \\equiv ${final} \\pmod{${state.n}}$$`
     }
 
     if (typeof renderMathInElement !== "undefined") {
@@ -159,17 +222,26 @@ function renderEquation() {
     }
 }
 
+function updateStepCounter() {
+    if (!stepCounter) return
+    if (state.maxSteps === 0) {
+        stepCounter.textContent = "No steps needed"
+    } else {
+        stepCounter.textContent = `Step ${state.currentStep} of ${state.maxSteps}`
+    }
+}
+
 function updatePlayButton() {
     if (!playPauseBtn) return
     const isAtMax = state.currentStep >= state.maxSteps
     if (state.isRunning) {
-        playPauseBtn.innerHTML = "Pause"
-        playPauseBtn.classList.remove("bg-indigo-600")
-        playPauseBtn.classList.add("bg-orange-500")
+        playPauseBtn.innerHTML = "⏸️ Pause"
+        playPauseBtn.classList.remove("from-purple-600", "to-indigo-600")
+        playPauseBtn.classList.add("from-orange-500", "to-red-500")
     } else {
-        playPauseBtn.innerHTML = isAtMax ? "Replay" : "Play"
-        playPauseBtn.classList.remove("bg-orange-500")
-        playPauseBtn.classList.add("bg-indigo-600")
+        playPauseBtn.innerHTML = isAtMax ? "🔄 Replay" : "▶️ Play"
+        playPauseBtn.classList.remove("from-orange-500", "to-red-500")
+        playPauseBtn.classList.add("from-purple-600", "to-indigo-600")
         playPauseBtn.disabled = (state.maxSteps === 0 && state.currentStep === 0)
     }
 }
@@ -177,6 +249,7 @@ function updatePlayButton() {
 function updateUI(forceProgress = 1) {
     syncDisplays()
     renderEquation()
+    updateStepCounter()
     drawRing(forceProgress)
     updatePlayButton()
 }
@@ -206,7 +279,7 @@ function startNextStepAnimation() {
 
     state.isAnimatingStep = true
     state.animationStartTime = 0
-    state.animationDuration = parseInt(speedSlider?.value || "300", 10)
+    state.animationDuration = parseInt(speedSlider?.value || "400", 10)
 
     const animateStep = (timestamp) => {
         if (!state.animationStartTime) state.animationStartTime = timestamp
@@ -250,7 +323,7 @@ function play() {
     updateUI(1)
 
     const animate = animateCheckbox?.checked ?? true
-    state.animationDuration = parseInt(speedSlider?.value || "300", 10)
+    state.animationDuration = parseInt(speedSlider?.value || "400", 10)
 
     if (!animate) {
         state.currentStep = state.maxSteps
@@ -295,4 +368,5 @@ export function resetAll() {
     state.currentStep = 0
     updateUI(1)
     renderEquation()
+    updateStepCounter()
 }

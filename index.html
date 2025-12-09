@@ -3,67 +3,178 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Z/nZ Arithmetic Simulator</title>
+    <title>ℤ/nℤ Arithmetic Explorer</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="style.css" />
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"></script>
 </head>
 
 <body class="p-4 sm:p-8 min-h-screen">
-    <div class="max-w-6xl mx-auto">
-        <header class="mb-8 text-center">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
-                ℤ/nℤ Arithmetic Simulator
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 text-center text-white slide-in">
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 drop-shadow-lg">
+                ℤ/nℤ Arithmetic Explorer
             </h1>
-            <p class="text-lg text-indigo-600 font-medium">Visualizing Modular Operations</p>
+            <p class="text-xl font-medium opacity-90">Discover the Beauty of Modular Arithmetic</p>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+        <main class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Left Panel: Controls -->
             <div class="lg:col-span-1 space-y-6">
-                <div class="bg-white p-6 rounded-xl shadow-custom border border-gray-100">
-                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Parameters</h2>
+                <!-- Parameters Card -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                        <span class="text-3xl mr-2">⚙️</span>
+                        Parameters
+                    </h2>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Ring Size (n)
+                                <span class="info-tooltip">
+                                    <span class="text-purple-600 cursor-help">ℹ️</span>
+                                    <span class="tooltip-text">How many numbers in our clock</span>
+                                </span>
+                            </label>
+                            <input id="modulus-input" type="range" min="2" max="20" value="12" class="w-full mb-2">
+                            <div class="text-3xl font-bold text-purple-600 text-center" id="modulus-display">12</div>
+                        </div>
 
-                    <label class="block text-sm font-medium text-gray-700">
-                        Ring Size n
+                        <div id="a-control">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Number (a)
+                                <span class="info-tooltip">
+                                    <span class="text-purple-600 cursor-help">ℹ️</span>
+                                    <span class="tooltip-text">Multiplier or starting point</span>
+                                </span>
+                            </label>
+                            <input id="a-number-input" type="range" min="0" max="19" value="3" class="w-full mb-2">
+                            <div class="text-3xl font-bold text-purple-600 text-center" id="a-number-display">3</div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Number (b)
+                                <span class="info-tooltip">
+                                    <span class="text-purple-600 cursor-help">ℹ️</span>
+                                    <span class="tooltip-text">What we're adding or how many times</span>
+                                </span>
+                            </label>
+                            <input id="b-number-input" type="range" min="0" max="20" value="5" class="w-full mb-2">
+                            <div class="text-3xl font-bold text-purple-600 text-center" id="b-number-display">5</div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Operation</label>
+                            <select id="operation-select" class="w-full p-3 border-2 border-purple-200 rounded-xl text-lg font-semibold focus:border-purple-500 focus:outline-none transition">
+                                <option value="addition">➕ Addition</option>
+                                <option value="multiplication">✖️ Multiplication</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Card -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                        <span class="text-3xl mr-2">🎮</span>
+                        Controls
+                    </h2>
+                    
+                    <button id="play-pause-btn" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition mb-3">
+                        ▶️ Play
+                    </button>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <button id="step-back-btn" class="flex-1 p-3 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition">
+                            ⬅️ Back
+                        </button>
+                        <button id="step-forward-btn" class="flex-1 p-3 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition">
+                            ➡️ Next
+                        </button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="flex items-center justify-between text-sm font-semibold text-gray-700 mb-2">
+                            <span>Animation Speed</span>
+                            <span id="speed-display" class="text-purple-600">Medium</span>
+                        </label>
+                        <input id="speed-slider" type="range" min="100" max="1000" value="400" step="100" class="w-full">
+                    </div>
+                    
+                    <label class="flex items-center cursor-pointer">
+                        <input id="animate-checkbox" type="checkbox" checked class="w-5 h-5 text-purple-600 mr-2">
+                        <span class="text-sm font-semibold text-gray-700">Animate Steps</span>
                     </label>
-                    <input id="modulus-input" type="range" min="2" max="20" value="5" />
-                    <div class="text-indigo-600 font-mono" id="modulus-display">5</div>
-
-                    <label class="block text-sm font-medium text-gray-700 mt-4">Number a</label>
-                    <input id="a-number-input" type="range" min="0" max="19" value="0" />
-                    <div class="text-indigo-600 font-mono" id="a-number-display">0</div>
-
-                    <label class="block text-sm font-medium text-gray-700 mt-4">Number b</label>
-                    <input id="b-number-input" type="range" min="0" max="20" value="3" />
-                    <div class="text-indigo-600 font-mono" id="b-number-display">3</div>
-
-                    <label class="block text-sm font-medium text-gray-700 mt-4">Operation</label>
-                    <select id="operation-select" class="border rounded p-2 w-full">
-                        <option value="addition">Addition</option>
-                        <option value="multiplication">Multiplication</option>
-                    </select>
+                    
+                    <div class="mt-4 p-3 bg-purple-50 rounded-lg">
+                        <p class="text-xs text-gray-600 font-medium">
+                            ⌨️ Keyboard: Space = Play/Pause, ← → = Step
+                        </p>
+                    </div>
                 </div>
 
-                <button id="play-pause-btn" class="w-full p-3 rounded-lg bg-indigo-600 text-white">
-                    Play
-                </button>
-            </div>
-
-            <div class="lg:col-span-2 space-y-6 flex flex-col items-center">
-                <canvas id="ringCanvas" width="400" height="400"></canvas>
-
-                <div class="bg-white p-6 rounded-xl shadow-custom border border-gray-100 w-full">
-                    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Current Result</h2>
-                    <div id="equation-display" class="text-center text-xl"></div>
+                <!-- Quick Examples -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-xl font-bold mb-3 text-gray-800">💡 Try These!</h2>
+                    <div class="space-y-2">
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg text-left text-sm font-semibold hover:from-blue-100 hover:to-blue-200 transition example-card" data-n="12" data-a="10" data-b="5" data-op="addition">
+                            🕐 Clock Arithmetic<br>
+                            <span class="text-xs text-gray-600">10 + 5 hours wraps to 3</span>
+                        </button>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg text-left text-sm font-semibold hover:from-green-100 hover:to-green-200 transition example-card" data-n="5" data-a="3" data-b="7" data-op="multiplication">
+                            🔢 Multiplication Cycles<br>
+                            <span class="text-xs text-gray-600">Watch 3×7 cycle in ℤ/5ℤ</span>
+                        </button>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-pink-50 to-pink-100 rounded-lg text-left text-sm font-semibold hover:from-pink-100 hover:to-pink-200 transition example-card" data-n="7" data-a="2" data-b="10" data-op="multiplication">
+                            🎨 Pattern Discovery<br>
+                            <span class="text-xs text-gray-600">Explore 2×10 in ℤ/7ℤ</span>
+                        </button>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg text-left text-sm font-semibold hover:from-purple-100 hover:to-purple-200 transition example-card" data-n="6" data-a="4" data-b="9" data-op="multiplication">
+                            ⭐ Zero Divisors<br>
+                            <span class="text-xs text-gray-600">4×9 ≡ 0 in ℤ/6ℤ!</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Right Panel: Visualization -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Canvas Card -->
+                <div class="glass-card p-8 rounded-2xl shadow-xl">
+                    <div class="flex justify-center">
+                        <canvas id="ringCanvas" width="500" height="500"></canvas>
+                    </div>
+                </div>
+
+                <!-- Equation Display -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl slide-in">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                        <span class="text-3xl mr-2">🧮</span>
+                        Current Calculation
+                    </h2>
+                    <div id="equation-display" class="text-center text-2xl min-h-[60px] flex items-center justify-center"></div>
+                    <div id="step-counter" class="text-center text-sm text-gray-600 mt-2 font-semibold"></div>
+                </div>
+
+                <!-- Educational Info -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                        <span class="text-3xl mr-2">📚</span>
+                        What's Happening?
+                    </h2>
+                    <div id="explanation" class="text-gray-700 leading-relaxed">
+                        <p class="mb-3"><strong>Modular arithmetic</strong> is like arithmetic on a clock! When we add or multiply in ℤ/nℤ, we "wrap around" after reaching n.</p>
+                        <p class="mb-3">👉 <strong>Think of it:</strong> If it's 10 o'clock and you add 5 hours, you get 3 o'clock (not 15 o'clock!).</p>
+                        <p><strong>Real-world uses:</strong> Cryptography, computer science, music theory, and calendar calculations all use modular arithmetic!</p>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
