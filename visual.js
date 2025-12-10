@@ -6,6 +6,18 @@ const CENTER = CANVAS_SIZE / 2
 const RADIUS = CANVAS_SIZE * 0.38
 const NODE_SIZE = 16
 
+const CHROMATIC_NOTES = ['C', 'C♯/D♭', 'D', 'D♯/E♭', 'E', 'F', 'F♯/G♭', 'G', 'G♯/A♭', 'A', 'A♯/B♭', 'B']
+const FIFTHS_NOTES = ['C', 'G', 'D', 'A', 'E', 'B', 'F♯/G♭', 'C♯/D♭', 'G♯/A♭', 'D♯/E♭', 'A♯/B♭', 'F']
+
+function getNodeLabel(value) {
+    if (state.mode === "chromatic" && state.n === 12) {
+        return CHROMATIC_NOTES[value]
+    } else if (state.mode === "fifths" && state.n === 12) {
+        return FIFTHS_NOTES[value]
+    }
+    return value.toString()
+}
+
 export function initCanvas() {
     canvas = document.getElementById("ringCanvas")
     if (!canvas) return
@@ -162,23 +174,34 @@ export function drawRing(currentProgress = 1) {
         ctx.shadowBlur = 0
 
         ctx.fillStyle = textFill
+        const fontSize = (state.mode !== "numeric" && state.n === 12) ? 13 : 16
         ctx.font = (isFinalResult || isStartOfJump || isAnimationTarget) 
-            ? "bold 18px Inter" 
-            : "600 16px Inter"
+            ? `bold ${fontSize + 2}px Inter` 
+            : `600 ${fontSize}px Inter`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
-        ctx.fillText(i.toString(), x, y)
+        
+        const label = getNodeLabel(i)
+        ctx.fillText(label, x, y)
     }
 
     const centerLabel = state.operation === "addition" 
         ? `${state.a} + ${state.b}` 
         : `${state.a} × ${state.b}`
+    
+    let displayLabel = centerLabel
+    if (state.mode === "chromatic" && state.n === 12) {
+        displayLabel = "Chromatic"
+    } else if (state.mode === "fifths" && state.n === 12) {
+        displayLabel = "Circle of Fifths"
+    }
+    
     ctx.font = "bold 32px Inter"
     const labelGradient = ctx.createLinearGradient(CENTER - 50, CENTER - 20, CENTER + 50, CENTER + 20)
     labelGradient.addColorStop(0, "#667eea")
     labelGradient.addColorStop(1, "#764ba2")
     ctx.fillStyle = labelGradient
-    ctx.fillText(centerLabel, CENTER, CENTER - 15)
+    ctx.fillText(displayLabel, CENTER, CENTER - 15)
     
     ctx.font = "600 20px Inter"
     ctx.fillStyle = "#8b5cf6"

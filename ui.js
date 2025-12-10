@@ -9,6 +9,7 @@ let modulusInput = null
 let aInput = null
 let bInput = null
 let operationSelect = null
+let modeSelect = null
 let equationDisplay = null
 let modulusDisplay = null
 let aDisplay = null
@@ -26,6 +27,7 @@ export function setupControls() {
     aInput = document.getElementById("a-number-input")
     bInput = document.getElementById("b-number-input")
     operationSelect = document.getElementById("operation-select")
+    modeSelect = document.getElementById("mode-select")
     equationDisplay = document.getElementById("equation-display")
     modulusDisplay = document.getElementById("modulus-display")
     aDisplay = document.getElementById("a-number-display")
@@ -71,6 +73,13 @@ export function setupControls() {
         })
     }
 
+    if (modeSelect) {
+        modeSelect.addEventListener("change", () => {
+            state.mode = modeSelect.value
+            handleParamChange()
+        })
+    }
+
     if (speedSlider) {
         speedSlider.addEventListener("input", () => {
             state.animationDuration = parseInt(speedSlider.value, 10)
@@ -104,8 +113,9 @@ export function setupControls() {
             const a = parseInt(btn.dataset.a, 10)
             const b = parseInt(btn.dataset.b, 10)
             const op = btn.dataset.op
+            const mode = btn.dataset.mode || "numeric"
             
-            loadExample(n, a, b, op)
+            loadExample(n, a, b, op, mode)
         })
     })
 
@@ -126,18 +136,20 @@ export function setupControls() {
     updateSpeedDisplay()
 }
 
-function loadExample(n, a, b, op) {
+function loadExample(n, a, b, op, mode = "numeric") {
     pause()
     
     state.n = n
     state.a = a
     state.b = b
     state.operation = op
+    state.mode = mode
     
     modulusInput.value = n
     aInput.value = a
     bInput.value = b
     operationSelect.value = op
+    modeSelect.value = mode
     
     syncDisplays()
     clampInputs()
@@ -235,11 +247,11 @@ function updatePlayButton() {
     if (!playPauseBtn) return
     const isAtMax = state.currentStep >= state.maxSteps
     if (state.isRunning) {
-        playPauseBtn.innerHTML = "⏸️ Pause"
+        playPauseBtn.innerHTML = "Pause"
         playPauseBtn.classList.remove("from-purple-600", "to-indigo-600")
         playPauseBtn.classList.add("from-orange-500", "to-red-500")
     } else {
-        playPauseBtn.innerHTML = isAtMax ? "🔄 Replay" : "▶️ Play"
+        playPauseBtn.innerHTML = isAtMax ? "Replay" : "Play"
         playPauseBtn.classList.remove("from-orange-500", "to-red-500")
         playPauseBtn.classList.add("from-purple-600", "to-indigo-600")
         playPauseBtn.disabled = (state.maxSteps === 0 && state.currentStep === 0)

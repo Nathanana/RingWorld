@@ -3,6 +3,7 @@ export const state = {
     a: 3,
     b: 5,
     operation: "addition",
+    mode: "numeric",
     sequence: [],
     startNum: 0,
     stepSize: 0,
@@ -21,11 +22,13 @@ export function validateAndGetParams() {
     const aEl = document.getElementById("a-number-input")
     const bEl = document.getElementById("b-number-input")
     const opEl = document.getElementById("operation-select")
+    const modeEl = document.getElementById("mode-select")
 
     const modulusVal = parseInt(modEl?.value || "12", 10)
     const aVal = parseInt(aEl?.value || "3", 10)
     const bVal = parseInt(bEl?.value || "5", 10)
     const opVal = opEl?.value || "addition"
+    const modeVal = modeEl?.value || "numeric"
 
     if (!Number.isInteger(modulusVal) || modulusVal < 2) {
         state.n = 12
@@ -38,6 +41,7 @@ export function validateAndGetParams() {
 
     state.b = Number.isInteger(bVal) ? Math.max(0, bVal) : 0
     state.operation = opVal
+    state.mode = modeVal
     return true
 }
 

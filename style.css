@@ -129,7 +129,6 @@ input[type="range"]::-moz-range-thumb:hover {
     white-space: nowrap;
 }
 
-/* Pulse animation for current result */
 @keyframes pulse {
     0%, 100% { 
         transform: scale(1);
@@ -145,7 +144,6 @@ input[type="range"]::-moz-range-thumb:hover {
     animation: pulse 2s ease-in-out infinite;
 }
 
-/* Button hover effects */
 button {
     transition: all 0.2s ease;
 }
@@ -154,7 +152,6 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;

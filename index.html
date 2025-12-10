@@ -14,21 +14,17 @@
 
 <body class="p-4 sm:p-8 min-h-screen">
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
         <header class="mb-8 text-center text-white slide-in">
             <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 drop-shadow-lg">
                 ℤ/nℤ Arithmetic Explorer
             </h1>
-            <p class="text-xl font-medium opacity-90">Discover the Beauty of Modular Arithmetic</p>
+            <p class="text-xl font-medium opacity-90">Modular Arithmetic and Music Theory</p>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <!-- Left Panel: Controls -->
             <div class="lg:col-span-1 space-y-6">
-                <!-- Parameters Card -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
-                        <span class="text-3xl mr-2">⚙️</span>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">
                         Parameters
                     </h2>
                     
@@ -72,30 +68,37 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Operation</label>
                             <select id="operation-select" class="w-full p-3 border-2 border-purple-200 rounded-xl text-lg font-semibold focus:border-purple-500 focus:outline-none transition">
-                                <option value="addition">➕ Addition</option>
-                                <option value="multiplication">✖️ Multiplication</option>
+                                <option value="addition">Addition</option>
+                                <option value="multiplication">Multiplication</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Visualization Mode</label>
+                            <select id="mode-select" class="w-full p-3 border-2 border-purple-200 rounded-xl text-lg font-semibold focus:border-purple-500 focus:outline-none transition">
+                                <option value="numeric">Numeric</option>
+                                <option value="chromatic">Chromatic Scale</option>
+                                <option value="fifths">Circle of Fifths</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Controls Card -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
-                        <span class="text-3xl mr-2">🎮</span>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">
                         Controls
                     </h2>
                     
                     <button id="play-pause-btn" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition mb-3">
-                        ▶️ Play
+                        Play
                     </button>
                     
                     <div class="flex gap-2 mb-4">
                         <button id="step-back-btn" class="flex-1 p-3 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition">
-                            ⬅️ Back
+                            Back
                         </button>
                         <button id="step-forward-btn" class="flex-1 p-3 rounded-xl bg-gray-200 hover:bg-gray-300 font-semibold transition">
-                            ➡️ Next
+                            Next
                         </button>
                     </div>
                     
@@ -114,64 +117,57 @@
                     
                     <div class="mt-4 p-3 bg-purple-50 rounded-lg">
                         <p class="text-xs text-gray-600 font-medium">
-                            ⌨️ Keyboard: Space = Play/Pause, ← → = Step
+                            Keyboard: Space = Play/Pause, Arrow Keys = Step
                         </p>
                     </div>
                 </div>
 
-                <!-- Quick Examples -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-xl font-bold mb-3 text-gray-800">💡 Try These!</h2>
+                    <h2 class="text-xl font-bold mb-3 text-gray-800">Quick Examples</h2>
                     <div class="space-y-2">
-                        <button class="example-btn w-full p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg text-left text-sm font-semibold hover:from-blue-100 hover:to-blue-200 transition example-card" data-n="12" data-a="10" data-b="5" data-op="addition">
-                            🕐 Clock Arithmetic<br>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg text-left text-sm font-semibold hover:from-blue-100 hover:to-blue-200 transition example-card" data-n="12" data-a="10" data-b="5" data-op="addition" data-mode="numeric">
+                            Clock Arithmetic<br>
                             <span class="text-xs text-gray-600">10 + 5 hours wraps to 3</span>
                         </button>
-                        <button class="example-btn w-full p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg text-left text-sm font-semibold hover:from-green-100 hover:to-green-200 transition example-card" data-n="5" data-a="3" data-b="7" data-op="multiplication">
-                            🔢 Multiplication Cycles<br>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg text-left text-sm font-semibold hover:from-green-100 hover:to-green-200 transition example-card" data-n="5" data-a="3" data-b="7" data-op="multiplication" data-mode="numeric">
+                            Multiplication Cycles<br>
                             <span class="text-xs text-gray-600">Watch 3×7 cycle in ℤ/5ℤ</span>
                         </button>
-                        <button class="example-btn w-full p-3 bg-gradient-to-r from-pink-50 to-pink-100 rounded-lg text-left text-sm font-semibold hover:from-pink-100 hover:to-pink-200 transition example-card" data-n="7" data-a="2" data-b="10" data-op="multiplication">
-                            🎨 Pattern Discovery<br>
-                            <span class="text-xs text-gray-600">Explore 2×10 in ℤ/7ℤ</span>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-pink-50 to-pink-100 rounded-lg text-left text-sm font-semibold hover:from-pink-100 hover:to-pink-200 transition example-card" data-n="12" data-a="0" data-b="7" data-op="addition" data-mode="chromatic">
+                            Chromatic Scale<br>
+                            <span class="text-xs text-gray-600">Visualize all 12 semitones</span>
                         </button>
-                        <button class="example-btn w-full p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg text-left text-sm font-semibold hover:from-purple-100 hover:to-purple-200 transition example-card" data-n="6" data-a="4" data-b="9" data-op="multiplication">
-                            ⭐ Zero Divisors<br>
-                            <span class="text-xs text-gray-600">4×9 ≡ 0 in ℤ/6ℤ!</span>
+                        <button class="example-btn w-full p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg text-left text-sm font-semibold hover:from-purple-100 hover:to-purple-200 transition example-card" data-n="12" data-a="0" data-b="7" data-op="addition" data-mode="fifths">
+                            Circle of Fifths<br>
+                            <span class="text-xs text-gray-600">Navigate perfect fifth intervals</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel: Visualization -->
             <div class="lg:col-span-3 space-y-6">
-                <!-- Canvas Card -->
                 <div class="glass-card p-8 rounded-2xl shadow-xl">
                     <div class="flex justify-center">
                         <canvas id="ringCanvas" width="500" height="500"></canvas>
                     </div>
                 </div>
 
-                <!-- Equation Display -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl slide-in">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
-                        <span class="text-3xl mr-2">🧮</span>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">
                         Current Calculation
                     </h2>
                     <div id="equation-display" class="text-center text-2xl min-h-[60px] flex items-center justify-center"></div>
                     <div id="step-counter" class="text-center text-sm text-gray-600 mt-2 font-semibold"></div>
                 </div>
 
-                <!-- Educational Info -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
-                        <span class="text-3xl mr-2">📚</span>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">
                         What's Happening?
                     </h2>
                     <div id="explanation" class="text-gray-700 leading-relaxed">
-                        <p class="mb-3"><strong>Modular arithmetic</strong> is like arithmetic on a clock! When we add or multiply in ℤ/nℤ, we "wrap around" after reaching n.</p>
-                        <p class="mb-3">👉 <strong>Think of it:</strong> If it's 10 o'clock and you add 5 hours, you get 3 o'clock (not 15 o'clock!).</p>
-                        <p><strong>Real-world uses:</strong> Cryptography, computer science, music theory, and calendar calculations all use modular arithmetic!</p>
+                        <p class="mb-3"><strong>Modular arithmetic</strong> is like arithmetic on a clock. When we add or multiply in ℤ/nℤ, we wrap around after reaching n.</p>
+                        <p class="mb-3">Think of it: If it's 10 o'clock and you add 5 hours, you get 3 o'clock (not 15 o'clock).</p>
+                        <p><strong>Real-world uses:</strong> Cryptography, computer science, music theory, and calendar calculations all use modular arithmetic.</p>
                     </div>
                 </div>
             </div>
